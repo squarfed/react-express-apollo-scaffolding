@@ -6,7 +6,7 @@ const BlockNumberForm = () => (
     <FormGroup>
       <Input type='number' name='blockNumber' placeholder='Numero blocco' />
     </FormGroup>
-    <Button type='submit'>Imposta</Button>
+    <Button type='submit' color='primary'>Imposta</Button>
   </Form>
 )
 
