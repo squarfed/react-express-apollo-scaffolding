@@ -117,6 +117,8 @@
           winningNumber = nonce % emails.length
           winner = emails[winningNumber]
           console.log('Winner:', winner);
+        }).catch((err) => {
+          alert('Error:', err)
         })
       })
 
