@@ -1,6 +1,10 @@
 import React from 'react'
 import {Col, Container, Row} from 'reactstrap'
 
+import emails from './emails'
+import BlockNumberForm from './BlockNumberForm'
+import WheelCanvas from './WheelCanvas'
+
 const Main = () => (
   <Container fluid>
     <Row>
@@ -10,10 +14,10 @@ const Main = () => (
     </Row>
     <Row>
       <Col md='9'>
-
+        <WheelCanvas emails={emails} />
       </Col>
       <Col md='3'>
-
+        <BlockNumberForm />
       </Col>
     </Row>
   </Container>

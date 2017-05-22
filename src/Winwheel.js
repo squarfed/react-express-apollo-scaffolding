@@ -31,7 +31,7 @@
 // ====================================================================================================================
 export default function Winwheel(options, drawWheel)
 {
-    defaultOptions = {
+    var defaultOptions = {
         'canvasId'          : 'canvas',     // Id of the canvas which the wheel is to draw on to.
         'centerX'           : null,         // X position of the center of the wheel. The default of these are null which means will be placed in center of the canvas.
         'centerY'           : null,         // Y position of the wheel center. If left null at time of construct the center of the canvas is used.
@@ -144,7 +144,7 @@ export default function Winwheel(options, drawWheel)
     // Add array of segments to the wheel, then populate with segments if number of segments is specified for this object.
     this.segments = new Array(null);
 
-    for (x = 1; x <= this.numSegments; x++)
+    for (var x = 1; x <= this.numSegments; x++)
     {
         // If options for the segments have been specified then create a segment sending these options so
         // the specified values are used instead of the defaults.
@@ -279,7 +279,7 @@ Winwheel.prototype.updateSegmentSizes = function()
         var numSet  = 0;
 
         // Remember, to make it easy to access segments, the position of the segments in the array starts from 1 (not 0).
-        for (x = 1; x <= this.numSegments; x ++)
+        for (var x = 1; x <= this.numSegments; x ++)
         {
             if (this.segments[x].size !== null)
             {
@@ -432,7 +432,7 @@ Winwheel.prototype.drawPins = function()
         // Work out the angle to draw each pin a which is simply 360 / the number of pins as they space evenly around.
         var pinSpacing = (360 / this.pins.number);
 
-        for(i=1; i<=this.pins.number; i ++)
+        for(var i=1; i<=this.pins.number; i ++)
         {
             this.ctx.save();
 
@@ -536,10 +536,10 @@ Winwheel.prototype.drawSegmentImages = function()
         {
             // Loop though and output all segments - position 0 of the array is not used, so start loop from index 1
             // this is to avoid confusion when talking about the first segment.
-            for (x = 1; x <= this.numSegments; x ++)
+            for (var x = 1; x <= this.numSegments; x ++)
             {
                 // Get the segment object as we need it to read options from.
-                seg = this.segments[x];
+                var seg = this.segments[x];
 
                 // Check image has loaded so a property such as height has a value.
                 if (seg.imgData.height)
@@ -645,10 +645,10 @@ Winwheel.prototype.drawSegments = function()
         {
             // Loop though and output all segments - position 0 of the array is not used, so start loop from index 1
             // this is to avoid confusion when talking about the first segment.
-            for (x = 1; x <= this.numSegments; x ++)
+            for (var x = 1; x <= this.numSegments; x ++)
             {
                 // Get the segment object as we need it to read options from.
-                seg = this.segments[x];
+                var seg = this.segments[x];
 
                 var fillStyle;
                 var lineWidth;
@@ -753,13 +753,13 @@ Winwheel.prototype.drawSegmentText = function()
         var fontSetting;
 
         // Loop though all the segments.
-        for (x = 1; x <= this.numSegments; x ++)
+        for (var x = 1; x <= this.numSegments; x ++)
         {
             // Save the context so it is certain that each segment text option will not affect the other.
             this.ctx.save();
 
             // Get the segment object as we need it to read options from.
-            seg = this.segments[x];
+            var seg = this.segments[x];
 
             // Check is text as no point trying to draw if there is no text to render.
             if (seg.text)
@@ -809,7 +809,7 @@ Winwheel.prototype.drawSegmentText = function()
                     lineOffset = 0;
                 }
 
-                for(i = 0; i < lines.length; i ++)
+                for(var i = 0; i < lines.length; i ++)
                 {
                     // ---------------------------------
                     // If direction is reversed then do things differently than if normal (which is the default - see further down)
@@ -904,7 +904,7 @@ Winwheel.prototype.drawSegmentText = function()
                                 // In reversed mode outer means text in 6 o'clock segment sits at bottom of the wheel and we draw up.
                                 for (var c = (lines[i].length -1); c >= 0; c--)
                                 {
-                                    character = lines[i].charAt(c);
+                                    var character = lines[i].charAt(c);
 
                                     if (fillStyle)
                                         this.ctx.fillText(character, this.centerX + lineOffset, yPos);
@@ -1691,7 +1691,7 @@ Winwheel.prototype.getIndicatedSegmentNumber = function()
     }
 
     // Now we can work out the prize won by seeing what prize segment startAngle and endAngle the relativeAngle is between.
-    for (x = 1; x < (this.segments.length); x ++)
+    for (var x = 1; x < (this.segments.length); x ++)
     {
         if ((relativeAngle >= this.segments[x]['startAngle']) && (relativeAngle <= this.segments[x]['endAngle']))
         {
@@ -2017,7 +2017,7 @@ Winwheel.prototype.getRandomForSegment = function(segmentNumber)
 // ====================================================================================================================
 function Pin(options)
 {
-    defaultOptions = {
+    var defaultOptions = {
         'visible'        : true,     // In future there might be some functionality related to the pins even if they are not displayed.
         'number'         : 36,       // The number of pins. These are evenly distributed around the wheel.
         'outerRadius'    : 3,        // Radius of the pins which determines their size.
@@ -2055,7 +2055,7 @@ function Pin(options)
 // ====================================================================================================================
 function Animation(options)
 {
-    defaultOptions = {
+    var defaultOptions = {
         'type'              : 'spinOngoing',       // For now there are only supported types are spinOngoing (continuous), spinToStop, spinAndBack, custom.
         'direction'         : 'clockwise',         // clockwise or anti-clockwise.
         'propertyName'      : null,                // The name of the winning wheel property to be affected by the animation.
@@ -2102,7 +2102,7 @@ function Segment(options)
 {
     // Define default options for segments, most are null so that the global defaults for the wheel
     // are used if the values for a particular segment are not specifically set.
-    defaultOptions = {
+    var defaultOptions = {
         'size'              : null, // Leave null for automatic. Valid values are degrees 0-360. Use percentToDegrees function if needed to convert.
         'text'              : '',   // Default is blank.
         'fillStyle'         : null, // If null for the rest the global default will be used.
@@ -2181,7 +2181,7 @@ Segment.prototype.changeImage = function(image, imageDirection)
 // ====================================================================================================================
 function PointerGuide(options)
 {
-    defaultOptions = {
+    var defaultOptions = {
         'display'     : false,
         'strokeStyle' : 'red',
         'lineWidth'   : 3
