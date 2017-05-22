@@ -1,0 +1,186 @@
+<!--
+    Winhweel.js wheel of fortune example by Douglas McKechie @ www.dougtesting.net
+    See website for tutorials and other documentation.
+
+    The MIT License (MIT)
+
+    Copyright (c) 2016 Douglas McKechie
+
+    Permission is hereby granted, free of charge, to any person obtaining a copy
+    of this software and associated documentation files (the "Software"), to deal
+    in the Software without restriction, including without limitation the rights
+    to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+    copies of the Software, and to permit persons to whom the Software is
+    furnished to do so, subject to the following conditions:
+
+    The above copyright notice and this permission notice shall be included in all
+    copies or substantial portions of the Software.
+
+    THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+    IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+    FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+    AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+    LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+    OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+    SOFTWARE.
+-->
+<html>
+  <head>
+    <title>HTML5 Canvas Winning Wheel</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-alpha.6/css/bootstrap.min.css" integrity="sha384-rwoIResjU2yc3z8GV/NPeZWAv56rSmLldC3R/AZzGRnGxQQKnKkoFVhFQhNUwEyJ" crossorigin="anonymous">
+    <script
+    src="https://code.jquery.com/jquery-3.2.1.min.js"
+    integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4="
+    crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/tether/1.4.0/js/tether.min.js" integrity="sha384-DztdAPBWPRXSA/3eYEEUWrWCy7G5KFbe8fFjk5JAIxUYHKkDx6Qin1DkWx51bBrb" crossorigin="anonymous"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-alpha.6/js/bootstrap.min.js" integrity="sha384-vBWWzlZJ8ea9aCX4pEW3rVHjgjt7zpkNpZk+02D9phzyeVkE+jo0ieGizqPLForn" crossorigin="anonymous"></script>
+    <link rel="stylesheet" href="main.css" type="text/css" />
+    <script type="text/javascript" src="Winwheel.js"></script>
+    <script src="http://cdnjs.cloudflare.com/ajax/libs/gsap/latest/TweenMax.min.js"></script>
+    <script type="text/javascript" src="emails.js"></script>
+  </head>
+  <body>
+    <div class="container-fluid">
+      <div class="row">
+        <div class="col-md-12">
+          <h1>Il vincitore è <strong id="winner">...</strong></h1>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-md-9">
+          <canvas id="canvas" width="800" height="800">
+            <p style="{color: white}" align="center">
+              Sorry, your browser doesn't support canvas. Please try another.
+            </p>
+          </canvas>
+        </div>
+        <div class="col-md-3">
+          <form id='getBlockNumber'>
+            <fieldset class="form-group">
+              <input type="number" name="blockNumber" class="form-control" placeholder="Numero blocco">
+            </fieldset>
+            <button type="submit" class="btn btn-primary">Imposta</button>
+          </form>
+          <br>
+          <div class="row">
+            <div class="col-md-12">
+              <button id="start" type="button" onclick="startSpin()" class="btn btn-primary disabled btn-block">
+                Gira la ruota
+              </button>
+            </div>
+          </div>
+          <br>
+          <form>
+            <div class="form-group row">
+              <label class="col-sm-6 col-form-label">Nonce (n):</label>
+              <div class="col-sm-6">
+                <p class="form-control-static" id="nonce"></p>
+              </div>
+            </div>
+            <div class="form-group row">
+              <label class="col-sm-8 col-form-label">Numero partecipanti (k):</label>
+              <div class="col-sm-4">
+                <p class="form-control-static" id="numberOfPartecipants"></p>
+              </div>
+            </div>
+            <div class="form-group row">
+              <label class="col-sm-8 col-form-label">Numero vincente (n % k):</label>
+              <div class="col-sm-4">
+                <p class="form-control-static" id="winningNumber"></p>
+              </div>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+    <script>
+      //const blockNumber = 467435
+      const blockHashUrl = 'https://blockexplorer.com/api/block-index/'
+      const blockUrl = 'https://blockexplorer.com/api/block/'
+      let nonce
+      let winningNumber
+      let winner
+
+      document.getElementById('getBlockNumber').addEventListener('submit', (e) => {
+        e.preventDefault()
+        const blockNumber = e.target.blockNumber.value
+
+        fetch(blockHashUrl + blockNumber)
+        .then((response) => response.json())
+        .then((obj) => obj.blockHash)
+        .then((hash) => fetch(blockUrl + hash))
+        .then((response) => response.json())
+        .then((block) => {
+          nonce = block.nonce
+          document.getElementById('start').classList.remove('disabled')
+          console.log('Nonce:', nonce);
+          winningNumber = nonce % emails.length
+          winner = emails[winningNumber]
+          console.log('Winner:', winner);
+        })
+      })
+
+      console.log('Number of partecipants:', emails.length);
+      const colorArray = [
+      '#ee1c24',
+      '#3cb878',
+      '#f6989d',
+      '#00aef0',
+      '#f26522'
+      ]
+      const segments = emails.map((e, i) => ({
+        fillStyle: colorArray[i % 5],
+        text: e
+      }))
+      // Create new wheel object specifying the parameters at creation time.
+      const theWheel = new Winwheel({
+        //'outerRadius'     : 400,        // Set outer radius so wheel fits inside the background.
+        innerRadius: 50,         // Make wheel hollow so segments don't go all way to center.
+        textFontSize: 10,         // Set default font size for the segments.
+        textOrientation: 'vertical', // Make text vertial so goes down from the outside of wheel.
+        textAlignment: 'outer',    // Align text to outside of wheel.
+        numSegments: emails.length,         // Specify number of segments.
+        segments: segments,
+        animation: {
+          type: 'spinToStop',
+          duration: 8,     // Duration in seconds.
+          spins: 3,     // Default number of complete spins.
+          stopAngle: 7.5,
+          callbackFinished: 'alertPrize()'
+        }
+      });
+
+      // Vars used by the code in this page to do power controls.
+      let wheelSpinning = false;
+
+      // -------------------------------------------------------
+      // Click handler for spin button.
+      // -------------------------------------------------------
+      function startSpin() {
+        // Ensure that spinning can't be clicked again while already running.
+        if (wheelSpinning == false)
+        {
+          theWheel.animation.stopAngle = 360 / emails.length * (nonce % emails.length + 0.5)
+
+          // Disable the spin button so can't click again while wheel is spinning.
+          document.getElementById('start').classList.add('disabled')
+          // Begin the spin animation by calling startAnimation on the wheel object.
+          theWheel.startAnimation();
+
+          // Set to true so that power can't be changed and spin button re-enabled during
+          // the current animation. The user will have to reset before spinning again.
+          wheelSpinning = true;
+        }
+      }
+
+      function alertPrize() {
+
+        // document.getElementById('start').classList.remove('disabled')
+        document.getElementById('winner').textContent = winner
+        document.getElementById('nonce').textContent = nonce
+        document.getElementById('numberOfPartecipants').textContent = emails.length
+        document.getElementById('winningNumber').textContent = winningNumber
+      }
+    </script>
+  </body>
+</html>
