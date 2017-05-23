@@ -9,6 +9,7 @@ import SpinButton from './SpinButton'
 import WheelCanvas from './WheelCanvas'
 import Winner from './Winner'
 
+const wsUrl = 'wss://ws.blockchain.info/inv'
 const blockHashUrl = 'https://blockexplorer.com/api/block-index/'
 const blockUrl = 'https://blockexplorer.com/api/block/'
 
@@ -16,11 +17,52 @@ const Main = createReactClass({
   displayName: 'Main',
 
   getInitialState: () => ({
+    blockCount: 0,
     fetching: false,
     nonce: undefined,
+    pinger: undefined,
     showResult: false,
+    socket: undefined,
     spinning: false
   }),
+
+  waitForBlock (height) {
+    const socket = new window.WebSocket(wsUrl)
+    const that = this
+
+    this.setState({
+      socket: socket
+    })
+
+    socket.addEventListener('open', (event) => {
+      socket.send('{"op":"blocks_sub"}')
+      const pinger = setInterval(() => {
+        console.log('Pinging...')
+        socket.send('{"op":"ping"}')
+      }, 30000)
+      that.setState({
+        pinger: pinger
+      })
+    })
+
+    socket.addEventListener('message', (event) => {
+      const data = JSON.parse(event.data)
+      if (data.op === 'block') {
+        const block = data.x
+        console.log('New block:', block)
+        if (block.height === height) {
+          console.log('Nonce:', block.nonce)
+          that.setState({
+            nonce: block.nonce
+          })
+        }
+      }
+    })
+  },
+
+  componentWillUnmount () {
+    clearInterval(this.state.pinger)
+  },
 
   getNonce (blockNumber) {
     this.setState({
@@ -39,8 +81,9 @@ const Main = createReactClass({
         })
         console.log('Nonce:', nonce)
       })
-      .catch((err) => {
-        window.alert('Error:', err)
+      .catch(() => {
+        console.log('Waiting for block:', blockNumber)
+        this.waitForBlock(blockNumber)
       })
   },
 
@@ -52,8 +95,8 @@ const Main = createReactClass({
 
   stopSpin () {
     this.setState({
-      showResult: true,
-      spinning: false
+      showResult: true
+//      spinning: false
     })
   },
 

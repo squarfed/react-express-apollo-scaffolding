@@ -49,7 +49,7 @@ export default createReactClass({
   },
 
   componentWillReceiveProps ({emails, nonce, spinning}) {
-    if (nonce && spinning) {
+    if (nonce) {
       this.state.theWheel.animation.stopAngle = 360 / emails.length * (nonce % emails.length + 0.5)
       this.state.theWheel.startAnimation()
     }
