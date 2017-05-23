@@ -6,16 +6,17 @@ const submitHandler = (cb) => (e) => {
   const blockNumber = e.target.blockNumber.value
 
   if (blockNumber) {
-    cb(blockNumber)
+    cb(parseInt(blockNumber))
   }
 }
 
-const BlockNumberForm = ({onBlockNumber}) => (
+const BlockNumberForm = ({onBlockNumber, onReset}) => (
   <Form onSubmit={submitHandler(onBlockNumber)}>
     <FormGroup>
       <Input type='number' name='blockNumber' placeholder='Numero blocco' />
     </FormGroup>
-    <Button type='submit' color='primary'>Imposta</Button>
+    <Button type='submit' color='primary' block>Imposta blocco</Button>
+    <Button type='button' color='danger' block onClick={onReset}>Reset</Button>
   </Form>
 )
 

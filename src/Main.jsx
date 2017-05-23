@@ -5,7 +5,6 @@ import {Col, Container, Row} from 'reactstrap'
 import emails from './emails'
 import BlockNumberForm from './BlockNumberForm'
 import ResultForm from './ResultForm'
-import SpinButton from './SpinButton'
 import WheelCanvas from './WheelCanvas'
 import Winner from './Winner'
 
@@ -17,7 +16,7 @@ const Main = createReactClass({
   displayName: 'Main',
 
   getInitialState: () => ({
-    blockCount: 0,
+    blockNumber: undefined,
     fetching: false,
     nonce: undefined,
     pinger: undefined,
@@ -66,6 +65,7 @@ const Main = createReactClass({
 
   getNonce (blockNumber) {
     this.setState({
+      blockNumber: blockNumber,
       fetching: true
     })
     window.fetch(blockHashUrl + blockNumber)
@@ -87,9 +87,9 @@ const Main = createReactClass({
       })
   },
 
-  startSpin () {
+  reset () {
     this.setState({
-      spinning: true
+      blockNumber: undefined
     })
   },
 
@@ -112,15 +112,9 @@ const Main = createReactClass({
           <WheelCanvas emails={emails} nonce={this.state.nonce} spinning={this.state.spinning} onStop={this.stopSpin} />
         </Col>
         <Col md='3'>
-          <BlockNumberForm onBlockNumber={this.getNonce} />
+          <BlockNumberForm onBlockNumber={this.getNonce} onReset={this.reset} />
           <br />
-          <Row>
-            <Col md='12'>
-              <SpinButton disabled={!this.state.nonce || this.state.spinning} onClick={this.startSpin} />
-            </Col>
-          </Row>
-          <br />
-          <ResultForm nonce={this.state.showResult && this.state.nonce} partecipants={emails.length} />
+          <ResultForm blockNumber={this.state.blockNumber} nonce={this.state.showResult && this.state.nonce} partecipants={emails.length} />
         </Col>
       </Row>
     </Container>
