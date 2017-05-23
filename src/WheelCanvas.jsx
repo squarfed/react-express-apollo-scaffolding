@@ -13,13 +13,15 @@ const colorArray = [
 
 export default createReactClass({
   displayName: 'WheelCanvas',
-  getInitialState: () => ({
-    theWheel: null,
-    wheelSpinning: false
-  }),
+
+  getInitialState () {
+    return {
+      theWheel: null
+    }
+  },
 
   componentDidMount () {
-    const emails = this.props.emails
+    const {emails, onStop} = this.props
     const segments = emails.map((e, i) => ({
       fillStyle: colorArray[i % 5],
       text: e
@@ -36,14 +38,21 @@ export default createReactClass({
         type: 'spinToStop',
         duration: 8,     // Duration in seconds.
         spins: 3,     // Default number of complete spins.
-        stopAngle: 7.5,
-        callbackFinished: 'alertPrize()'
+        stopAngle: 0,
+        callbackFinished: onStop
       }
     })
 
     this.setState({
       theWheel: theWheel
     })
+  },
+
+  componentWillReceiveProps ({emails, nonce, spinning}) {
+    if (nonce && spinning) {
+      this.state.theWheel.animation.stopAngle = 360 / emails.length * (nonce % emails.length + 0.5)
+      this.state.theWheel.startAnimation()
+    }
   },
 
   render () {

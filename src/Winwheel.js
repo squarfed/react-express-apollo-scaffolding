@@ -2262,7 +2262,7 @@ function winwheelStopAnimation(canCallback)
     {
         if (winwheelToDrawDuringAnimation.animation.callbackFinished != null)
         {
-            eval(winwheelToDrawDuringAnimation.animation.callbackFinished);
+            winwheelToDrawDuringAnimation.animation.callbackFinished()
         }
     }
 }
