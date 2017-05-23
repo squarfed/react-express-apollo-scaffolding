@@ -7,6 +7,7 @@ const submitHandler = (cb) => (e) => {
 
   if (blockNumber) {
     cb(parseInt(blockNumber))
+    e.target.blockNumber.value = ''
   }
 }
 

@@ -64,6 +64,7 @@ const Main = createReactClass({
   },
 
   getNonce (blockNumber) {
+    this.reset()
     this.setState({
       blockNumber: blockNumber,
       fetching: true
@@ -88,8 +89,20 @@ const Main = createReactClass({
   },
 
   reset () {
+    if (this.state.pinger) {
+      clearInterval(this.state.pinger)
+    }
+
+    if (this.state.socket) {
+      this.state.socket.close()
+    }
+
     this.setState({
-      blockNumber: undefined
+      blockNumber: undefined,
+      nonce: undefined,
+      pinger: undefined,
+      showResult: false,
+      socket: undefined
     })
   },
 
