@@ -6,29 +6,26 @@ const webpackHotMiddleware = require('webpack-hot-middleware')
 const config = require("../webpack.config.js")
 
 const app = express()
-const DIST_DIR = path.join(__dirname, "public")
-const PORT     = 3000
+const DIST_DIR = path.join(__dirname, "../dist")
 const compiler = webpack(config)
+const isProduction = process.env.NODE_ENV === 'production'
+const port = isProduction ? process.env.PORT : 3000
 
-app.use(webpackDevMiddleware(compiler, {
+if(!isProduction) {
+  app.use(webpackDevMiddleware(compiler, {
     publicPath: config.output.publicPath
-}));
+  }))
 
-app.use(webpackHotMiddleware(compiler, {
+  app.use(webpackHotMiddleware(compiler, {
     log: console.log
-}))
+  }))
+} else {
+  app.get('/', function(req, res) {
+    res.sendFile(path.join(DIST_DIR + '/index.html'))
+  })
 
-app.get("*", (req, res, next) => {
-    const filename = path.join(DIST_DIR, "index.html")
-
-    compiler.outputFileSystem.readFile(filename, (err, result) => {
-    if (err) {
-        return next(err);
-    }
-    res.set('content-type', 'text/html');
-    res.send(result);
-    res.end();
-    });
-});
-
-app.listen(PORT);
+  app.get('/index.js', function(req, res) {
+    res.sendFile(path.join(DIST_DIR + '/index.js'))
+  })
+}
+app.listen(port)
