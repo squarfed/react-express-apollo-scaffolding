@@ -2,7 +2,6 @@ const path = require("path")
 const express = require("express")
 const webpack = require("webpack")
 const webpackDevMiddleware = require("webpack-dev-middleware")
-const webpackHotMiddleware = require('webpack-hot-middleware')
 const config = require("../webpack.config.js")
 
 const app = express()
@@ -15,10 +14,6 @@ if(!isProduction) {
   app.use(webpackDevMiddleware(compiler, {
     publicPath: config.output.publicPath
   }))
-
-  app.use(webpackHotMiddleware(compiler, {
-    log: console.log
-  }))
 } else {
   app.get('/', function(req, res) {
     res.sendFile(path.join(DIST_DIR + '/index.html'))
@@ -28,4 +23,5 @@ if(!isProduction) {
     res.sendFile(path.join(DIST_DIR + '/index.js'))
   })
 }
+
 app.listen(port)
