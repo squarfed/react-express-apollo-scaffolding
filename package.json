@@ -1,12 +1,13 @@
 {
-  "name": "lottery",
+  "name": "react-express-scaffolding",
   "version": "0.1.0",
-  "description": "Satoshi’￼￼s Wheel of Fortune",
+  "description": "Scaffolding for react and express",
   "main": "src/index.js",
   "scripts": {
     "build": "webpack --progress --config webpack.config.js",
     "lint": "standard",
-    "start": "webpack-dev-server",
+    "start": "NODE_ENV=production PORT=80 node server/main.js",
+    "start-dev": "nodemon server/main.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
@@ -24,6 +25,7 @@
     "extract-text-webpack-plugin": "^2.1.2",
     "html-webpack-plugin": "^2.29.0",
     "node-sass": "^4.5.3",
+    "progress-bar-webpack-plugin": "^1.10.0",
     "sass-loader": "^6.0.6",
     "standard": "^10.0.2",
     "style-ext-html-webpack-plugin": "^3.4.1",

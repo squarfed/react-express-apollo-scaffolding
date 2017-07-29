@@ -1,16 +1,21 @@
-const path = require('path')
-const HtmlWebpackPlugin = require('html-webpack-plugin')
 const ExtractTextPlugin = require('extract-text-webpack-plugin')
+const HtmlWebpackPlugin = require('html-webpack-plugin')
+const ProgressBarPlugin = require('progress-bar-webpack-plugin')
 const StyleExtHtmlWebpackPlugin = require('style-ext-html-webpack-plugin')
+const path = require('path')
 
 module.exports = {
-  entry: './src/App.jsx',
+  entry: [
+    './src/App.jsx'
+  ],
+  devtool: 'source-map',
   output: {
     path: path.join(__dirname, 'dist'),
-    publicPath: "/",
+    publicPath: '/',
     filename: 'index.js'
   },
   plugins: [
+    new ProgressBarPlugin(),
     new HtmlWebpackPlugin({
       inject: 'head',
       template: './src/index.html'
