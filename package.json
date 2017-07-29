@@ -8,6 +8,7 @@
     "lint": "standard",
     "start": "NODE_ENV=production PORT=80 node server/main.js",
     "start-dev": "nodemon server/main.js",
+    "start-debug": "nodemon --inspect server/main.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
@@ -34,9 +35,13 @@
     "webpack-dev-server": "^2.6.1"
   },
   "dependencies": {
+    "apollo-server": "^0.3.3",
     "bootstrap": "^4.0.0-alpha.6",
     "create-react-class": "^15.6.0",
     "express": "^4.15.3",
+    "graphql": "^0.10.5",
+    "graphql-server-express": "^1.0.4",
+    "graphql-tools": "^1.1.0",
     "react": "^15.6.1",
     "react-dom": "^15.6.1",
     "react-transition-group": "^1.2.0",
