@@ -36,6 +36,7 @@
   },
   "dependencies": {
     "apollo-server": "^0.3.3",
+    "body-parser": "^1.17.2",
     "bootstrap": "^4.0.0-alpha.6",
     "create-react-class": "^15.6.0",
     "express": "^4.15.3",
