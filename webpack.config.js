@@ -2,29 +2,48 @@ const ExtractTextPlugin = require('extract-text-webpack-plugin')
 const HtmlWebpackPlugin = require('html-webpack-plugin')
 const ProgressBarPlugin = require('progress-bar-webpack-plugin')
 const StyleExtHtmlWebpackPlugin = require('style-ext-html-webpack-plugin')
+const {getIfUtils, removeEmpty} = require('webpack-config-utils')
 const path = require('path')
+const webpack = require('webpack')
+
+const nodeEnv = process.env.NODE_ENV || 'development'
+const {ifProduction} = getIfUtils(nodeEnv)
 
 module.exports = {
   entry: [
-    './src/App.jsx'
+    'react-hot-loader/patch',
+    'webpack-hot-middleware/client?reload',
+    'webpack/hot/only-dev-server',
+    path.join(__dirname, 'src/App.jsx')
   ],
-  devtool: 'source-map',
+  devtool: ifProduction('source-map', 'eval-source-map'),
   output: {
     path: path.join(__dirname, 'dist'),
     publicPath: '/',
     filename: 'index.js'
   },
-  plugins: [
+  plugins: removeEmpty([
     new ProgressBarPlugin(),
     new HtmlWebpackPlugin({
       inject: 'head',
-      template: './src/index.html'
+      template: path.join(__dirname, 'src/index.html')
     }),
     new ExtractTextPlugin('styles.css'),
+    new webpack.HotModuleReplacementPlugin(),
     new StyleExtHtmlWebpackPlugin({
       minify: true
-    })
-  ],
+    }),
+    ifProduction(new webpack.LoaderOptionsPlugin({
+      minimize: true,
+      quiet: true
+    })),
+    ifProduction(new webpack.optimize.UglifyJsPlugin({
+      compress: {
+        screw_ie8: true,
+        warnings: false
+      }
+    }))
+  ]),
   resolve: {
     extensions: ['.js', '.jsx', '.scss']
   },
@@ -36,16 +55,11 @@ module.exports = {
       {
         test: /\.jsx?$/,
         exclude: /node_modules/,
-        use: {
-          loader: 'babel-loader',
-          options: {
-            presets: ['react']
-          }
-        }
+        use: ['babel-loader']
       },
       {
         test: /\.css$/,
-        use: ['style-loader', 'css-loader']
+        use: ifProduction(['style-loader', 'css-loader'], ['css-loader'])
       },
       {
         test: /\.scss$/,

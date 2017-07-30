@@ -2,6 +2,7 @@ const path = require('path')
 const express = require('express')
 const webpack = require('webpack')
 const webpackDevMiddleware = require('webpack-dev-middleware')
+const webpackHotMiddleware = require('webpack-hot-middleware')
 const bodyParser = require('body-parser')
 const config = require('../webpack.config.js')
 const graphqlExpress = require('graphql-server-express').graphqlExpress
@@ -36,13 +37,13 @@ const resolvers = {
     posts (root, args) {
       return postsData.filter(post =>
         !args.keyword || post.content.indexOf(args.keyword) >= 0)
-    },
+    }
   },
   Mutation: {
     addPost (root, doc) {
       postsData.push(doc)
       return doc
-    },
+    }
   }
 }
 
@@ -50,15 +51,25 @@ const schema = makeExecutableSchema({ typeDefs, resolvers })
 
 const app = express()
 const DIST_DIR = path.join(__dirname, '../dist')
-const compiler = webpack(config)
-const isProduction = process.env.NODE_ENV === 'production'
+const nodeEnv = process.env.NODE_ENV || 'development'
+const isProduction = nodeEnv === 'production'
 const port = isProduction ? process.env.PORT : 3000
+const compiler = webpack(config)
 
 if (!isProduction) {
   app.use(webpackDevMiddleware(compiler, {
-    noInfo: true,
+    lazy: false,
+    quiet: true,
+
+    watchOptions: {
+      aggregateTimeout: 300,
+      poll: true
+    },
+    noInfo: false,
     publicPath: config.output.publicPath
   }))
+        app.use(webpackHotMiddleware(compiler))
+  
 } else {
   app.get('/', function (req, res) {
     res.sendFile(path.join(DIST_DIR + '/index.html'))
