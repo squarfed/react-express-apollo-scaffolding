@@ -71,6 +71,7 @@ if (!isProduction) {
     res.sendFile(path.join(DIST_DIR + '/index.js'))
   })
 }
+
 app.use('/graphql', bodyParser.json(), graphqlExpress({schema}))
 app.use('/graphiql', graphiqlExpress({endpointURL: '/graphql'}))
 

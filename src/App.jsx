@@ -1,8 +1,7 @@
 import React from 'react'
 import ReactDOM from 'react-dom'
 
-import ApolloClient, { createNetworkInterface } from 'apollo-client'
-import { ApolloProvider } from 'react-apollo'
+import {ApolloClient, createNetworkInterface, ApolloProvider} from 'react-apollo'
 
 import './styles'
 import Main from './Main'
@@ -13,9 +12,9 @@ const client = new ApolloClient({
 
 const render = () => {
   ReactDOM.render(
-      <ApolloProvider client={client}>
-        <Main />
-      </ApolloProvider>
+    <ApolloProvider client={client}>
+      <Main />
+    </ApolloProvider>
     , document.getElementById('app'))
 }
 document.addEventListener('DOMContentLoaded', () => render())
