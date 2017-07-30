@@ -58,18 +58,10 @@ const compiler = webpack(config)
 
 if (!isProduction) {
   app.use(webpackDevMiddleware(compiler, {
-    lazy: false,
     quiet: true,
-
-    watchOptions: {
-      aggregateTimeout: 300,
-      poll: true
-    },
-    noInfo: false,
     publicPath: config.output.publicPath
   }))
-        app.use(webpackHotMiddleware(compiler))
-  
+  app.use(webpackHotMiddleware(compiler))
 } else {
   app.get('/', function (req, res) {
     res.sendFile(path.join(DIST_DIR + '/index.html'))

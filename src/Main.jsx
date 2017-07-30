@@ -7,7 +7,7 @@ const query = gql`
  posts {
     name
   }
-  }
+}
 `
 
 const Main = createReactClass({
@@ -19,12 +19,9 @@ const Main = createReactClass({
       return (<div>Loading</div>)
     }
     if (this.props.data.error) {
-      //console.log(this.props.data.error)
       return (<div>An unexpected error occurred</div>)
     }
-    //console.log(this.props.data)
     const {posts} = this.props.data
-    slfjlsdkjf
     return (<div>
       <ul>
         {posts.map(post => <li> {post.name} </li>)}

@@ -11,9 +11,7 @@ const {ifProduction} = getIfUtils(nodeEnv)
 
 module.exports = {
   entry: [
-    'react-hot-loader/patch',
-    'webpack-hot-middleware/client?reload',
-    'webpack/hot/only-dev-server',
+    'webpack-hot-middleware/client?reload=true',
     path.join(__dirname, 'src/App.jsx')
   ],
   devtool: ifProduction('source-map', 'eval-source-map'),
