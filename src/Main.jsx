@@ -1,5 +1,6 @@
 import React from 'react'
 import createReactClass from 'create-react-class'
+import { Button } from 'reactstrap'
 import { gql, graphql } from 'react-apollo'
 
 const query = gql`
@@ -9,6 +10,23 @@ const query = gql`
   }
 }
 `
+const createPost = gql`
+mutation {
+  createPost(title:"hello", content:"world") {
+    _id
+    title
+    content
+  }
+}`
+
+const posts = gql`
+query {
+  posts {
+    _id
+    title
+    content
+  }
+}`
 
 const Main = createReactClass({
   displayName: 'Main',
@@ -28,6 +46,13 @@ const Main = createReactClass({
       </ul>
       <button onClick={this.handleClick}>aggiungi</button>
     </div>
+      <Form onSubmit={this.handleSubmit}>
+       <FormGroup>
+          <Label for="title">Title</Label>
+          <Input type="text" name="title" id="title" placeholder="title" />
+        </FormGroup>
+         <Button>Submit</Button>
+      </Form>
     )
   }
 })
