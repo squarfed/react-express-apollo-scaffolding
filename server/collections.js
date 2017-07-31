@@ -2,7 +2,6 @@ const mongodb = require('mongodb')
 const {MongoClient, ObjectId} = mongodb
 const {makeExecutableSchema} = require('graphql-tools')
 
-const MONGO_URL = 'mongodb://localhost:27017/apollotest'
 
 const typeDefs = [`
 type Post {
@@ -43,7 +42,7 @@ const prepare = (o) => {
 }
 
 const makeDefaultSchema = async () => { 
-  const db = await MongoClient.connect(MONGO_URL)
+  const db = await MongoClient.connect(process.env.MONGO_URL)
   console.log('Connected correctly to server.')
 
   const Posts = db.collection('posts')

@@ -1,3 +1,5 @@
+require('dotenv').config()
+
 const path = require('path')
 const express = require('express')
 const bodyParser = require('body-parser')
@@ -10,7 +12,7 @@ const {graphqlExpress, graphiqlExpress} = require('graphql-server-express')
 const DIST_DIR = path.join(__dirname, '../dist')
 const nodeEnv = process.env.NODE_ENV || 'development'
 const isProduction = nodeEnv === 'production'
-const port = isProduction ? process.env.PORT : 3000
+const port = isProduction ? process.env.PORT : process.env.TEST_PORT
 const compiler = webpack(config)
 
 const makeDefaultSchema = require('./collections')
