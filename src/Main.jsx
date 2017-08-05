@@ -1,15 +1,19 @@
 import React from 'react'
 import createReactClass from 'create-react-class'
-import { Button } from 'reactstrap'
+import { Button, Form, FormGroup, Input, Label } from 'reactstrap'
 import { gql, graphql } from 'react-apollo'
+import CreatePost from './CreatePost'
 
+  /*
 const query = gql`
- query{
+ query {
  posts {
     name
   }
-}
-`
+}`
+*/
+
+  /*
 const createPost = gql`
 mutation {
   createPost(title:"hello", content:"world") {
@@ -18,6 +22,7 @@ mutation {
     content
   }
 }`
+*/
 
 const posts = gql`
 query {
@@ -37,24 +42,23 @@ const Main = createReactClass({
       return (<div>Loading</div>)
     }
     if (this.props.data.error) {
-      return (<div>An unexpected error occurred</div>)
+      console.error(this.props.data.error)
+      return (
+        <div>
+          An unexpected error occurred
+        </div>
+      )
     }
     const {posts} = this.props.data
-    return (<div>
-      <ul>
-        {posts.map(post => <li> {post.name} </li>)}
-      </ul>
-      <button onClick={this.handleClick}>aggiungi</button>
-    </div>
-      <Form onSubmit={this.handleSubmit}>
-       <FormGroup>
-          <Label for="title">Title</Label>
-          <Input type="text" name="title" id="title" placeholder="title" />
-        </FormGroup>
-         <Button>Submit</Button>
-      </Form>
+    return (
+      <div>
+        <ul>
+          {posts.map(post => <li> {post.name} </li>)}
+        </ul>
+        <CreatePost/>
+      </div>
     )
   }
 })
 
-export default graphql(query)(Main)
+export default graphql(posts)(Main)

@@ -2,7 +2,6 @@ const mongodb = require('mongodb')
 const {MongoClient, ObjectId} = mongodb
 const {makeExecutableSchema} = require('graphql-tools')
 
-
 const typeDefs = [`
 type Post {
   _id: String
@@ -35,13 +34,12 @@ schema {
 }
 `]
 
-
 const prepare = (o) => {
   o._id = o._id.toString()
   return o
 }
 
-const makeDefaultSchema = async () => { 
+const makeDefaultSchema = async () => {
   const db = await MongoClient.connect(process.env.MONGO_URL)
   console.log('Connected correctly to server.')
 
@@ -57,7 +55,7 @@ const makeDefaultSchema = async () => {
       },
       comment: async (root, {_id}) => {
         return prepare(await Comments.findOne(ObjectId(_id)))
-      },
+      }
     },
     Mutation: {
       createPost: async (root, args, context, info) => {
@@ -70,8 +68,7 @@ const makeDefaultSchema = async () => {
       }
     }
   }
-
-  const schema = makeExecutableSchema({ typeDefs, resolvers })
+  const schema = makeExecutableSchema({typeDefs, resolvers})
   return schema
 }
 
