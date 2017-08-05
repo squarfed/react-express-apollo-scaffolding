@@ -1,28 +1,7 @@
 import React from 'react'
 import createReactClass from 'create-react-class'
-import { Button, Form, FormGroup, Input, Label } from 'reactstrap'
 import { gql, graphql } from 'react-apollo'
 import CreatePost from './CreatePost'
-
-  /*
-const query = gql`
- query {
- posts {
-    name
-  }
-}`
-*/
-
-  /*
-const createPost = gql`
-mutation {
-  createPost(title:"hello", content:"world") {
-    _id
-    title
-    content
-  }
-}`
-*/
 
 const posts = gql`
 query {
@@ -33,10 +12,9 @@ query {
   }
 }`
 
-const Main = createReactClass({
-  displayName: 'Main',
-  handleClick: () => {
-  },
+const Posts = createReactClass({
+  displayName: 'Posts',
+
   render () {
     if (this.props.data.loading) {
       return (<div>Loading</div>)
@@ -51,14 +29,11 @@ const Main = createReactClass({
     }
     const {posts} = this.props.data
     return (
-      <div>
-        <ul>
-          {posts.map(post => <li> {post.name} </li>)}
-        </ul>
-        <CreatePost/>
-      </div>
+      <ul>
+        {posts.map(post => <li> {post.name} </li>)}
+      </ul>
     )
   }
 })
 
-export default graphql(posts)(Main)
+export default graphql(posts)(Posts)

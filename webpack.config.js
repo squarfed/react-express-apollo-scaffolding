@@ -12,7 +12,7 @@ const {ifProduction} = getIfUtils(nodeEnv)
 module.exports = {
   entry: [
     'webpack-hot-middleware/client?reload=true',
-    path.join(__dirname, 'src/App.jsx')
+    path.join(__dirname, 'client/App.jsx')
   ],
   devtool: ifProduction('source-map', 'eval-source-map'),
   output: {
@@ -24,7 +24,7 @@ module.exports = {
     new ProgressBarPlugin(),
     new HtmlWebpackPlugin({
       inject: 'head',
-      template: path.join(__dirname, 'src/index.html')
+      template: path.join(__dirname, 'client/index.html')
     }),
     new ExtractTextPlugin('styles.css'),
     new webpack.HotModuleReplacementPlugin(),
