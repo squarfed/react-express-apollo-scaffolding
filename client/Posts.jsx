@@ -1,9 +1,8 @@
 import React from 'react'
 import createReactClass from 'create-react-class'
 import { gql, graphql } from 'react-apollo'
-import CreatePost from './CreatePost'
 
-const posts = gql`
+export const posts = gql`
 query {
   posts {
     _id
@@ -30,10 +29,12 @@ const Posts = createReactClass({
     const {posts} = this.props.data
     return (
       <ul>
-        {posts.map(post => <li> {post.name} </li>)}
+        {posts.map(post => <li key={post._id}> {post.title} {post.content} </li>)}
       </ul>
     )
   }
 })
 
-export default graphql(posts)(Posts)
+export default graphql(posts, {
+  options: { pollInterval: 10000 }
+})(Posts)

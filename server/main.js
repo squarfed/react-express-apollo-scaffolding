@@ -35,9 +35,8 @@ if (!isProduction) {
 };
 
 (async () => {
-const schema = await makeDefaultSchema()
-app.use('/graphql', bodyParser.json(), graphqlExpress({schema}))
-app.use('/graphiql', graphiqlExpress({endpointURL: '/graphql'}))
-app.listen(port)
+  const schema = await makeDefaultSchema()
+  app.use('/graphql', bodyParser.json(), graphqlExpress({schema}))
+  app.use('/graphiql', graphiqlExpress({endpointURL: '/graphql'}))
+  app.listen(port)
 })()
-

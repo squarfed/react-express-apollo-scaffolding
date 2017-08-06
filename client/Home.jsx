@@ -16,4 +16,4 @@ const Home = createReactClass({
   }
 })
 
-export default Home 
+export default Home
