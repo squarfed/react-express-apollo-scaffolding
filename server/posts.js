@@ -16,13 +16,13 @@ type Comment {
   post: Post
 }
 
-type Query {
+extend type Query {
   post(_id: String): Post
   posts: [Post]
   comment(_id: String): Comment
 }
 
-type Mutation {
+extend type Mutation {
   createPost(title: String, content: String): Post
   createComment(postId: String, content: String): Comment
 }
