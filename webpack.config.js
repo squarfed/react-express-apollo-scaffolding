@@ -12,7 +12,7 @@ const {ifProduction} = getIfUtils(nodeEnv)
 module.exports = {
   entry: [
     'webpack-hot-middleware/client?reload=true',
-    path.join(__dirname, 'client/App.jsx')
+    path.join(__dirname, 'client/main.jsx')
   ],
   devtool: ifProduction('source-map', 'eval-source-map'),
   output: {
