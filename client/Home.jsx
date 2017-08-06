@@ -1,7 +1,8 @@
 import React from 'react'
 import createReactClass from 'create-react-class'
-import CreatePost from './CreatePost'
+import CreatePost from 'CreatePost'
 import Posts from 'Posts'
+import Greet from 'Greet'
 
 const Home = createReactClass({
   displayName: 'Home',
@@ -11,6 +12,7 @@ const Home = createReactClass({
       <div>
         <Posts />
         <CreatePost />
+        <Greet />
       </div>
     )
   }

@@ -6,7 +6,7 @@ import { posts } from 'Posts'
 
 const createPost = gql`
 mutation createPost($title: String!, $content: String!) {
-  createPost(title: $title, content:$content) {
+  createPost(title: $title, content: $content) {
     _id
     title
     content
@@ -23,7 +23,8 @@ const CreatePost = createReactClass({
       return
     }
     try {
-      const {data} = await this.props.mutate({
+      // const {data} = await this.props.mutate({
+      await this.props.mutate({
         variables: { title, content },
         refetchQueries: [{query: posts}]
       })
@@ -36,17 +37,20 @@ const CreatePost = createReactClass({
   },
   render () {
     return (
-      <Form onSubmit={this.handleSubmit}>
-        <FormGroup>
-          <Label for='title'>Title</Label>
-          <Input type='text' name='title' id='title' placeholder='title' />
-        </FormGroup>
-        <FormGroup>
-          <Label for='content'>Content</Label>
-          <Input type='text' name='content' id='content' placeholder='content' />
-        </FormGroup>
-        <Button>Submit</Button>
-      </Form>
+      <div>
+        <h1> Insert a post in the DB </h1>
+        <Form onSubmit={this.handleSubmit}>
+          <FormGroup>
+            <Label for='title'>Title</Label>
+            <Input type='text' name='title' id='title' placeholder='title' />
+          </FormGroup>
+          <FormGroup>
+            <Label for='content'>Content</Label>
+            <Input type='text' name='content' id='content' placeholder='content' />
+          </FormGroup>
+          <Button>Insert</Button>
+        </Form>
+      </div>
     )
   }
 })
