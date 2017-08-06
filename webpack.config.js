@@ -43,6 +43,7 @@ module.exports = {
     }))
   ]),
   resolve: {
+    modules: [ path.resolve(__dirname, 'client'), 'node_modules'],
     extensions: ['.js', '.jsx', '.scss']
   },
   devServer: {

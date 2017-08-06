@@ -1,7 +1,7 @@
 import React from 'react'
 import createReactClass from 'create-react-class'
 import CreatePost from './CreatePost'
-import Posts from './Posts'
+import Posts from 'Posts'
 
 const Home = createReactClass({
   displayName: 'Home',

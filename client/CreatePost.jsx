@@ -2,7 +2,7 @@ import React from 'react'
 import createReactClass from 'create-react-class'
 import { Form, FormGroup, Label, Input, Button } from 'reactstrap'
 import { gql, graphql } from 'react-apollo'
-import { posts } from './Posts'
+import { posts } from 'Posts'
 
 const createPost = gql`
 mutation createPost($title: String!, $content: String!) {
